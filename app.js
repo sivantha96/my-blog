@@ -31,6 +31,20 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model("Blog", blogSchema)
 
+Blog.create({
+    title: "Test blog",
+    image: "https://image.shutterstock.com/image-photo/beautiful-water-drop-on-dandelion-260nw-789676552.jpg",
+    body: "This is a test blog",
+})
+
+app.get("/", function(req, res){
+    res.send("Working!")
+})
+
+// INDEX
+app.get("/blogs", function(req, res){
+    //Index route goes here
+})
 app.listen(3001, function(err){
     if (err) {
         console.log(err);
