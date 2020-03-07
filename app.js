@@ -38,13 +38,37 @@ Blog.create({
 })
 
 app.get("/", function(req, res){
-    res.send("Working!")
+    res.redirect("/blogs")
 })
 
 // INDEX
 app.get("/blogs", function(req, res){
-    //Index route goes here
+    Blog.find({}, function(err, blogs){
+        if (err) {
+            console.log(err)
+        } else {
+            res.render("index", {blogs: blogs})
+        }
+    })
+    
 })
+
+// NEW
+app.get("/blogs/new", function(req, res){
+    res.render("new")
+})
+
+// CREATE
+app.post("/blogs", function(req, res){
+    Blog.create(req.body.blog, function(err, blog){
+        if(err){
+            res.render("new")
+        } else {
+            res.redirect("/blogs")
+        }
+    })
+})
+
 app.listen(3001, function(err){
     if (err) {
         console.log(err);
