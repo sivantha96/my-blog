@@ -2,6 +2,8 @@ const express = require("express")
 const app = express()
 const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
+const methodOverride = require("method-override")
+const expressSanitizer = require("express-sanitizer")
 
 mongoose.connect("mongodb://localhost/blog", {
     useNewUrlParser: true,
@@ -15,6 +17,8 @@ mongoose.connect("mongodb://localhost/blog", {
 app.set("view engine", "ejs")
 app.use(express.static("public"))
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(expressSanitizer())
+app.use(methodOverride("_method"))
 
 const blogSchema = new mongoose.Schema({
     title: String,
@@ -30,12 +34,6 @@ const blogSchema = new mongoose.Schema({
 })
 
 const Blog = mongoose.model("Blog", blogSchema)
-
-Blog.create({
-    title: "Test blog",
-    image: "https://image.shutterstock.com/image-photo/beautiful-water-drop-on-dandelion-260nw-789676552.jpg",
-    body: "This is a test blog",
-})
 
 app.get("/", function(req, res){
     res.redirect("/blogs")
@@ -60,9 +58,56 @@ app.get("/blogs/new", function(req, res){
 
 // CREATE
 app.post("/blogs", function(req, res){
+    req.body.blog.body = req.sanitize(rq.body.blog.body)
     Blog.create(req.body.blog, function(err, blog){
         if(err){
             res.render("new")
+        } else {
+            res.redirect("/blogs")
+        }
+    })
+})
+
+// SHOW
+app.get("/blogs/:id", function(req, res){
+    Blog.findById(req.params.id, function(err, blog){
+        if(err){
+            console.log(err)
+            res.redirect("/blogs")
+        } else {
+            res.render("show", {blog: blog})
+        }
+    })
+})
+
+// EDIT
+app.get("/blogs/:id/edit", function(req, res){
+    Blog.findById(req.params.id, function(err, blog){
+        if (err) {
+            res.redirect("/blogs")
+        } else {
+            res.render("edit", {blog: blog})
+        }
+    })
+})
+
+// UPDATE
+app.put("/blogs/:id", function(req, res){
+    req.body.blog.body = req.sanitize(rq.body.blog.body)
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err){
+        if (err) {
+            res.redirect("/blogs")
+        } else {
+            res.redirect("/blogs/" + req.params.id)
+        }
+    })
+})
+
+// DESTROY
+app.delete("/blogs/:id", function(req, res){
+    Blog.findByIdAndDelete(req.params.id, function(err){
+        if (err) {
+            console.log(err)
         } else {
             res.redirect("/blogs")
         }

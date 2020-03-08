@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+
+<div class="ui raised text main container segment">
+    <form class="ui icon right floated buttons" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
+        <button class="ui button" type="submit" href="/blogs/<%= blog._id %>/edit"><i class="trash icon"></i></button>
+        <a class="ui button" href="/blogs/<%= blog._id %>/edit"><i class="edit icon"></i></a>
+    </form>
+    <!-- <div class="ui icon right floated buttons">
+        <a class="ui button" href="/blogs/<%= blog._id %>/edit"><i class="edit icon"></i></a>
+    </div> -->
+    <h1 class="ui header">
+        <%= blog.title %>
+    </h1>
+    <h5 class="ui header"><%= blog.created %></h5>
+    <div class="">
+        <img class="ui fluid bordered image" src="<%= blog.image %>">
+    </div>
+    <br>
+    <p><%- blog.body %></p>
+</div>
+
+<%- include('partials/footer') %>

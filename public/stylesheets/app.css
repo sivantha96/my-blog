@@ -1,7 +1,8 @@
-i.icon {
+i.code.icon {
     font-size: 2em;
 }
 
 .container.main {
-    margin-top: 5em;
+    margin-top: 7em;
+    padding: 2em;
 }
