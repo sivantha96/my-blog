@@ -1,9 +1,8 @@
 <%- include('partials/header') %>
 
 <div class="ui main container segment">
-    <div class="ui three column grid">
+    <div class="ui three stackable cards">
         <% blogs.forEach(function(blog){ %>
-            <div class="column">
                 <a class="ui fluid link card" href="/blogs/<%= blog._id %>">
                     <div class="image">
                         <img src="<%= blog.image %>">
@@ -23,7 +22,6 @@
                     </div>
                     
                 </a>
-            </div>
         <% }) %>
     </div>
 </div>
